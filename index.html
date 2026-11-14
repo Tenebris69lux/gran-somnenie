@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Грань · О сомнении, что отличает болезнь от дара</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=PT+Sans:wght@400;700&display=swap');
+
+  :root{
+    --ink:#0c0a10;
+    --ink-2:#14101b;
+    --paper:#e9e3d5;
+    --paper-dim:#b9b1a0;
+    --gold:#c9a55a;
+    --gold-bright:#e8c879;
+    --gold-deep:#8a6a2c;
+    --crimson:#8a2f3a;
+    --teal:#2f6f6a;
+    --line:rgba(201,165,90,.28);
+    --serif:'Cormorant Garamond','PT Serif',Georgia,'Times New Roman',serif;
+    --body:'PT Serif',Georgia,'Times New Roman',serif;
+    --sans:'PT Sans','Helvetica Neue',Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 700px at 78% -8%, #1c1626 0%, transparent 60%),
+      radial-gradient(900px 600px at 6% 110%, #1a1220 0%, transparent 55%),
+      var(--ink);
+    color:var(--paper);
+    font-family:var(--body);
+    font-size:19px;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:rgba(201,165,90,.32);color:#fff;}
+
+  /* progress rail */
+  .rail{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold-deep),var(--gold-bright));z-index:50;transition:width .15s ease;}
+
+  /* nav */
+  nav.top{
+    position:sticky;top:0;z-index:40;
+    backdrop-filter:blur(10px);
+    background:rgba(12,10,16,.72);
+    border-bottom:1px solid var(--line);
+    font-family:var(--sans);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  nav.top .inner{max-width:1080px;margin:0 auto;display:flex;gap:26px;padding:12px 24px;align-items:center;flex-wrap:wrap;}
+  nav.top .brand{font-family:var(--serif);font-style:italic;font-size:17px;letter-spacing:.02em;text-transform:none;color:var(--gold-bright);margin-right:auto;}
+  nav.top a{color:var(--paper-dim);text-decoration:none;transition:color .2s;}
+  nav.top a:hover{color:var(--gold-bright);}
+
+  main{max-width:760px;margin:0 auto;padding:0 26px;}
+
+  /* hero */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;padding:60px 0 40px;}
+  .hero .author{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--gold-bright);margin-bottom:14px;letter-spacing:.02em;}
+  .hero .kicker{font-family:var(--sans);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:30px;}
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(48px,8.4vw,104px);
+    line-height:.96;
+    letter-spacing:-.01em;
+    margin:0 0 26px;
+    color:var(--paper);
+  }
+  .hero h1 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+  .hero .lede{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.6vw,26px);color:var(--paper-dim);max-width:620px;line-height:1.5;margin-bottom:42px;}
+  .hero .scroll-cue{font-family:var(--sans);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);animation:pulse 2.4s ease-in-out infinite;}
+
+  /* threshold visual */
+  .threshold{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin:46px 0 10px;align-items:stretch;}
+  .threshold .side{padding:24px 22px;border:1px solid var(--line);min-height:120px;display:flex;flex-direction:column;justify-content:center;}
+  .threshold .side.left{border-radius:6px 0 0 6px;text-align:right;}
+  .threshold .side.right{border-radius:0 6px 6px 0;}
+  .threshold .axis{
+    width:74px;position:relative;background:linear-gradient(180deg,transparent,var(--gold-deep) 20%,var(--gold-bright) 50%,var(--gold-deep) 80%,transparent);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .threshold .axis span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--sans);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#0c0a10;background:var(--gold-bright);padding:10px 4px;border-radius:3px;}
+  .threshold .label{font-family:var(--sans);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .threshold .name{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--paper);}
+  .threshold .small{font-size:14px;color:var(--paper-dim);margin-top:6px;font-style:italic;}
+
+  section{padding:64px 0;border-top:1px solid var(--line);}
+  section:first-of-type{border-top:none;}
+
+  .num{font-family:var(--sans);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:14px;}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(32px,5vw,48px);line-height:1.08;margin:0 0 26px;letter-spacing:-.005em;color:var(--paper);}
+  h2 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+  h3{font-family:var(--serif);font-weight:600;font-size:26px;margin:34px 0 12px;color:var(--gold-bright);}
+
+  p{margin:0 0 20px;hyphens:auto;}
+  p.lead{font-size:21px;font-family:var(--serif);font-style:italic;color:var(--paper-dim);}
+  .dropcap::first-letter{
+    font-family:var(--serif);
+    font-weight:600;
+    float:left;font-size:74px;line-height:.8;
+    padding:6px 12px 0 0;color:var(--gold-bright);
+  }
+
+  blockquote{
+    margin:34px 0;padding:26px 30px;
+    border-left:2px solid var(--gold);
+    background:linear-gradient(90deg, rgba(201,165,90,.07), transparent 70%);
+    font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.5;color:var(--paper);
+  }
+  blockquote cite{display:block;margin-top:14px;font-style:normal;font-family:var(--sans);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
+
+  .pull{font-family:var(--serif);font-style:italic;font-size:30px;line-height:1.3;text-align:center;color:var(--gold-bright);margin:40px 0;padding:0 20px;}
+
+  /* clinical chart */
+  .chart-wrap{margin:30px 0;border:1px solid var(--line);border-radius:8px;padding:24px;background:rgba(20,16,27,.5);}
+  .chart-toggle{display:flex;gap:8px;margin-bottom:18px;font-family:var(--sans);font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
+  .chart-toggle button{background:transparent;color:var(--paper-dim);border:1px solid var(--line);padding:8px 14px;border-radius:20px;cursor:pointer;transition:.2s;}
+  .chart-toggle button.active{background:var(--gold);color:#0c0a10;border-color:var(--gold);}
+  .chart-toggle button:hover{color:var(--gold-bright);}
+  .chart-toggle button.active:hover{color:#0c0a10;}
+  #chartSvg{width:100%;height:auto;display:block;}
+  .chart-cap{font-family:var(--sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-dim);margin-top:14px;text-align:center;}
+  .chart-key{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:10px;font-family:var(--sans);font-size:12px;color:var(--paper-dim);}
+  .chart-key span{display:flex;align-items:center;gap:7px;}
+  .chart-key i{width:12px;height:12px;border-radius:2px;display:inline-block;}
+
+  /* comparison table */
+  .compare{margin:30px 0;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .compare .row{display:grid;grid-template-columns:1.2fr 1fr 1fr;border-bottom:1px solid var(--line);cursor:pointer;transition:background .25s;}
+  .compare .row:last-child{border-bottom:none;}
+  .compare .row:hover{background:rgba(201,165,90,.06);}
+  .compare .row.head{cursor:default;background:rgba(201,165,90,.1);font-family:var(--sans);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
+  .compare .row.head:hover{background:rgba(201,165,90,.1);}
+  .compare .cell{padding:16px 18px;border-right:1px solid var(--line);}
+  .compare .cell:last-child{border-right:none;}
+  .compare .dim{font-family:var(--serif);font-style:italic;color:var(--paper);}
+  .compare .row.head .dim{font-style:normal;color:var(--gold);font-family:var(--sans);}
+  .compare .sick{color:#d98a8a;}
+  .compare .gift{color:#8ad9c8;}
+  .compare .detail{grid-column:1/-1;padding:0 18px;max-height:0;overflow:hidden;transition:max-height .4s ease, padding .4s ease;color:var(--paper-dim);font-style:italic;font-size:17px;line-height:1.7;}
+  .compare .row.open .detail{max-height:260px;padding:6px 18px 22px;}
+  .compare .row.open .cell{color:var(--paper);}
+  .compare .hint{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);padding:14px 18px;text-align:center;border-top:1px solid var(--line);background:rgba(201,165,90,.05);}
+
+  /* spectrum */
+  .spectrum-wrap{margin:34px 0;border:1px solid var(--line);border-radius:8px;padding:28px;background:rgba(20,16,27,.5);}
+  .spectrum-bar{position:relative;height:42px;border-radius:21px;overflow:hidden;display:flex;margin:30px 0 6px;}
+  .spectrum-bar .seg{height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--sans);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(12,10,16,.85);}
+  .seg.s1{background:#5a2f33;}
+  .seg.s2{background:#8a5a3a;}
+  .seg.s3{background:linear-gradient(90deg,#8a6a2c,var(--gold-bright));}
+  .seg.s4{background:#3a5a6a;}
+  .seg.s5{background:#2a3a5a;}
+  .spectrum-marker{position:absolute;top:-10px;width:3px;height:62px;background:var(--paper);box-shadow:0 0 10px rgba(232,200,121,.8);transform:translateX(-1.5px);transition:left .08s ease;border-radius:2px;}
+  .spectrum-marker::after{content:'';position:absolute;top:-7px;left:-6px;width:15px;height:15px;background:var(--gold-bright);border-radius:50%;box-shadow:0 0 12px var(--gold-bright);}
+  input[type=range]{width:100%;margin:14px 0 0;-webkit-appearance:none;height:6px;background:transparent;cursor:pointer;}
+  input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,#5a2f33,#8a5a3a,#c9a55a,#e8c879,#3a5a6a,#2a3a5a);border-radius:3px;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--paper);border:3px solid var(--gold-bright);margin-top:-9px;box-shadow:0 0 12px rgba(232,200,121,.6);}
+  input[type=range]::-moz-range-track{height:6px;background:linear-gradient(90deg,#5a2f33,#8a5a3a,#c9a55a,#e8c879,#3a5a6a,#2a3a5a);border-radius:3px;}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--paper);border:3px solid var(--gold-bright);box-shadow:0 0 12px rgba(232,200,121,.6);}
+  .spectrum-readout{min-height:120px;margin-top:22px;}
+  .spectrum-readout .zone{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;}
+  .spectrum-readout h4{font-family:var(--serif);font-style:italic;font-size:30px;margin:6px 0 10px;color:var(--gold-bright);}
+  .spectrum-readout p{margin:0;color:var(--paper-dim);font-size:17px;line-height:1.7;}
+
+  /* timeline */
+  .timeline{margin:34px 0;position:relative;padding-left:34px;}
+  .timeline::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:1px;background:linear-gradient(180deg,var(--gold),transparent);}
+  .tl-item{position:relative;padding:0 0 26px 6px;}
+  .tl-item::before{content:'';position:absolute;left:-31px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--ink);border:2px solid var(--gold);}
+  .tl-item .when{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+  .tl-item .what{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--paper);margin-bottom:6px;line-height:1.4;}
+  .tl-item .gloss{font-size:16.5px;color:var(--paper-dim);line-height:1.7;}
+
+  .data-card{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0;}
+  .data-card .stat{border:1px solid var(--line);border-radius:8px;padding:18px 20px;background:rgba(20,16,27,.5);}
+  .data-card .stat .n{font-family:var(--serif);font-size:42px;font-weight:600;color:var(--gold-bright);line-height:1;}
+  .data-card .stat .t{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-dim);margin-top:8px;line-height:1.5;}
+
+  footer.coda{text-align:center;padding:80px 0 60px;border-top:1px solid var(--line);color:var(--paper-dim);}
+  footer.coda .mark{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--gold-bright);margin-bottom:14px;}
+  footer.coda .meta{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--paper-dim);}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease, transform .9s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  @keyframes pulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+
+  @media (max-width:680px){
+    body{font-size:18px;}
+    .threshold{grid-template-columns:1fr;}
+    .threshold .axis{width:100%;height:50px;}
+    .threshold .axis span{writing-mode:horizontal-tb;transform:none;}
+    .threshold .side.left{text-align:left;border-radius:6px 6px 0 0;}
+    .threshold .side.right{border-radius:0 0 6px 6px;}
+    .compare .row{grid-template-columns:1fr;}
+    .compare .cell{border-right:none;border-bottom:1px solid var(--line);}
+    .compare .row.head{display:none;}
+    .compare .dim::before{content:'Измерение: ';color:var(--gold);font-family:var(--sans);font-size:11px;letter-spacing:.16em;}
+    .data-card{grid-template-columns:1fr;}
+    main{padding:0 20px;}
+    nav.top .inner{gap:14px;font-size:11px;}
+  }
+</style>
+</head>
+<body>
+<div class="rail" id="rail"></div>
+
+<nav class="top">
+  <div class="inner">
+    <span class="brand">Грань</span>
+    <a href="#prelude">Предисловие</a>
+    <a href="#boundary">Грань</a>
+    <a href="#clinical">Клиника</a>
+    <a href="#gift">Дар</a>
+    <a href="#nazareth">Назарет</a>
+    <a href="#comparison">Сравнение</a>
+    <a href="#spectrum">Спектр</a>
+    <a href="#ethics">Этика</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="author reveal in">Автор: Tenebris lux</div>
+  <div class="kicker reveal in">Эссе-повесть о сомнении</div>
+  <h1 class="reveal in">Грань&nbsp;— <em>сомнение</em></h1>
+  <p class="lede reveal in">Где кончается человек, поражённый шизофренией, и начинается человек, действительно наделённый особым даром? Граница проходит не по яркости видения, а по способности того, кто видит, — усомниться в себе.</p>
+
+  <div class="threshold reveal">
+    <div class="side left">
+      <div class="label">Болезнь</div>
+      <div class="name">уверенность без тени</div>
+      <div class="small">«я здоров и более чем здоров — я избран»</div>
+    </div>
+    <div class="axis"><span>сомнение</span></div>
+    <div class="side right">
+      <div class="label">Дар</div>
+      <div class="name">свет, который боится себя</div>
+      <div class="small">«здоров ли я? имею ли право?»</div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">прочесть эссе ↓</div>
+</header>
+
+<!-- ===== I. ПРЕДИСЛОВИЕ ===== -->
+<section id="prelude">
+  <span class="num">I · Предисловие</span>
+  <h2>О том, как <em>спросили</em></h2>
+  <p class="dropcap">Вопрос был задан так, как задают его уже не первое столетие — негромко, но с упорством человека, который однажды увидел во тьме два силуэта и больше не может решить, который из них бредёт, а который — ведёт. Какая грань, спрашивают, между человеком, поражённым шизофренией, и человеком, действительно наделённым особыми — назовём пока их так — экстрасенсорными способностями и мистическим даром? В чём она, эта грань, если снаружи оба говорят о голосах, оба читают в чужих судьбах, оба готовы назвать себя избранниками?</p>
+  <p>Я отвечу. Но прежде позвольте сказать, чем этот ответ не является. Он не медицинский — хотя в нём будет клиника, и клиника настоящая, с цифрами. Он не богословский — хотя в нём встретится имя из Назарета, и встретится не случайно. Он — о сомнении. О том, что единственный надёжный внутренний прибор, отличающий болезнь от дара, — это не яркость видения и не точность предсказания, а способность того, кто видит, усомниться в себе самом.</p>
+  <p>Это эссе написано для всех, кто когда-либо стоял у этой грани — с той или с другой стороны, или, что чаще, прямо на ней. Для тех, кто слышит голоса и не знает, посланы ли они свыше или из глубины собственной разрушающейся психики. Для тех, кто любит такого человека и боится ошибиться: поддержать там, где надо лечить, или осудить там, где надо услышать. И для тех, кто просто хочет понять, почему в нашем языке слова «пророк» и «безумец» так часто оказываются двумя переводами одного и того же слова.</p>
+</section>
+
+<!-- ===== II. ГРАНЬ ===== -->
+<section id="boundary">
+  <span class="num">II · Грань</span>
+  <h2>Та, которую <em>нельзя увидеть</em></h2>
+  <p class="lead">Грань проходит не снаружи. Снаружи оба — одинаково странные. Грань проходит внутри.</p>
+  <p>Поражённый болезнью человек совершенно убеждён в своей уникальности, в своей избранности. Он без сомнения уверен, что он здоров — и даже более того, что он вплоть до миссии и выше личность. В его внутреннем небе нет ни одной тучи: он знает. Он знает, кто он. Он знает, зачем он. Он знает, что другие просто не доросли, не услышали, не поняли, отстали. Его правота дана ему целиком, разом, как монета, отчеканенная не им, — и он не имеет повода её пересматривать, потому что пересматривать можно лишь то, в чём допускаешь ошибку.</p>
+  <p>Реально же одарённый — тот, кто действительно знает скрытые от большинства связи мира, — не утрачивает в себе сомнения. Здоров ли он умственно? Здоров ли душевно? Какое моральное право он имеет влиять на судьбы людей? Этичны ли его суждения? Эти вопросы не отпускают его; они живут в нём тем сильнее, чем сильнее дар, — как тень растёт вместе со светом. Чем больше он видит, тем меньше он уверен, что видеть — значит знать; чем больше ему доверяют, тем страшнее ему доверять себе.</p>
+  <div class="pull">Болезнь — это уверенность.<br>Дар — это её отсутствие.</div>
+  <p>Парадокс в том, что грань проходит не по содержанию переживания, а по отношению к нему. Один и тот же отчёт — «я слышу голос, который другие не слышат» — может быть и симптомом, и откровением, и разница между ними не в том, что говорит голос, и не в том, громко ли он говорит, а в том, может ли слышащий поставить под вопрос сам факт, что слышит. Больной не может — потому что сомнение требует инструмента, а болезнь именно этот инструмент и разрушила. Дарующий не перестаёт — потому что дар, в отличие от болезни, не выжигает критику, а, напротив, держится на ней, как равновесие канатоходца держится на постоянном чувстве падения.</p>
+  <p>Поэтому грань нельзя увидеть, глядя на человека со стороны, в момент, когда он говорит. Её видно только в момент, когда он молчит. В тишине, наступающей после переживания, больной достраивает и достраивает свою правоту, — а дарующий сидит и спрашивает себя: а что, если я болен? И этот вопрос, который со стороны выглядит как слабость, как недостаток веры, как позорное малодушие, — есть, напротив, единственное доказательство, что перед нами не случай болезни.</p>
+</section>
+
+<!-- ===== III. КЛИНИКА ===== -->
+<section id="clinical">
+  <span class="num">III · Клиника</span>
+  <h2>Анозогнозия, или <em>сон разума, не знающий, что спит</em></h2>
+  <p>У этого явления есть имя. В клинической психиатрии inability распознать у себя болезнь называется <em>анозогнозией</em> — от греческих «без», «знание», «болезнь»: буквально, не-знание о собственной болезни. Это не упрямство и не ложь, не желание скрыть недуг. Это структурное, неврологическое по своей природе отсутствие того самого прибора, который позволил бы человеку увидеть собственное расстройство. Пациент не отказывается признать болезнь — ему не из чего её признавать, как слепому не из чего увидеть тьму: тьма для него и есть норма зрения.</p>
+  <p>При шизофрении анозогнозия встречается с пугающей регулярностью. Обобщая данные клинической литературы последних десятилетий (от работ А. Сараторио и Х. Амадора до современных мета-анализов), можно говорить: от половины до четырёх пятых пациентов демонстрируют выраженное или полное отсутствие критики к своему состоянию. Это не крайний случай, не редкость — это, по сути, картина болезни. Именно поэтому бред величия, бред избранности, бред особой миссии так устойчив: они защищены не логикой, а отсутствием органа сомнения.</p>
+
+  <div class="data-card">
+    <div class="stat"><div class="n">60–80%</div><div class="t">доля пациентов с шизофренией, у которых нарушен или отсутствует инсайд (критика к болезни)</div></div>
+    <div class="stat"><div class="n">≈⅓</div><div class="t">доля среди них с бредом величия, избранности, особой миссии — по обобщённым выборкам</div></div>
+  </div>
+
+  <div class="chart-wrap reveal">
+    <div class="chart-toggle">
+      <button data-set="all" class="active">оба профиля</button>
+      <button data-set="sick">болезнь</button>
+      <button data-set="gift">дар</button>
+    </div>
+    <svg id="chartSvg" viewBox="0 0 560 320" role="img" aria-label="Сравнительная диаграмма: болезнь против дара по пяти измерениям"></svg>
+    <div class="chart-key">
+      <span><i style="background:#d98a8a"></i>Болезнь (уверенность без тени)</span>
+      <span><i style="background:#8ad9c8"></i>Дар (свет, который боится себя)</span>
+    </div>
+    <div class="chart-cap">Пять измерений · 0 — отсутствие, 10 — максимум</div>
+  </div>
+
+  <p>Взгляните на диаграмму. Я свёл к пяти осям то, что separates эти два профиля, — и видно, как они зеркальны. Где у болезни кривая взлетает к потолку (уверенность в избранности, недопущение ошибки), у дара она падает. И наоборот: там, где болезнь не оставляет ни единицы (страх перед своим даром, проверка суждения на этичность), дар поднимается почти до предела. Они — два негатива одной и той же фотографии. Один не существует без другого; грань — это линия проявки между ними.</p>
+
+  <blockquote>
+    Анозогнозия — не то, что пациент скрывает от врача. Это то, что болезнь скрыла от пациента. Поэтому спросить больного «вы понимаете, что вы больны?» — всё равно что спросить у вырванного глаза, видит ли он, что вырван.
+    <cite>— клиническое наблюдение</cite>
+  </blockquote>
+
+  <p>Важно сказать и о том, чего я не утверждаю. Наличие критики не есть доказательство дара — сомневаться в себе могут и тревожные, и депрессивные, и просто честные люди без всякого мистического призвания. Но отсутствие критики, особенно в сочетании с убеждённостью в собственной миссии и в собственной правоте, есть мощный, статистически устойчивый знак того, что мы на стороне болезни. Грань, стало быть, устроена асимметрично: по одну её сторону верный признак есть, по другую — лишь возможность. Так всегда бывает с настоящими границами: их можно перейти в одну сторону безвозвратно, а в другую — лишь на свой страх и риск.</p>
+</section>
+
+<!-- ===== IV. ДАР ===== -->
+<section id="gift">
+  <span class="num">IV · Дар</span>
+  <h2>Свет, который <em>боится себя</em></h2>
+  <p>Теперь — другая сторона. О даре трудно говорить, не впадая в пошлость, потому что язык для этого у нас украли шарлатаны и сериалы. Попробуем всё же. Дар, в отличие от болезни, не разрушает критику — он её, парадоксальным образом, обостряет. Чем больше человеку дано увидеть, тем больше у него оснований испугаться собственного видения: ведь если ты и правда видишь то, чего не видят другие, — значит, твоя рука лежит на чужой судьбе, и одно неловкое слово может стать для человека вестью, от которой он переменит жизнь. Эта ответственность не давит на больного — потому что больной её не видит. Она давит на дарующего — потому что он видит её слишком хорошо.</p>
+  <p>Оттого подлинно одарённый человек выглядит со стороны куда менее «магически», чем шарлатан или, тем более, чем больной. Он не клянётся в своих способностях, не демонстрирует их по требованию, не раздаёт визиток с титулом «магистр». Он, напротив, склонен отговорить вас от себя: «Я не знаю, было ли это. Может быть, мне показалось. Может быть, я просто болен и мне надо к врачу». Этот голос, который про себя говорит «может быть, я болен», — это и есть тонкая нить, за которую держится грань.</p>
+  <p>Ещё одна черта: дарующий сторонится славы и страшится её, — точно так же, как болезнью гордятся. Больной выставляет свою миссию напоказ, потому что миссия есть часть бреда, а бред требует зрителя. Дарующий прячется, потому что зритель есть часть опасности: стоит ему поверить в тебя больше, чем ты сам в себя, — и ты уже не ведёшь, тебя несёт. Пророк, который наслаждается тем, что его слушают, — почти всегда уже не пророк; осталось только решить, стал ли он шарлатаном или больным, и разница между этими двумя — уже другая история.</p>
+  <div class="pull">Дар проверяется не силой,<br>а страхом перед собственной силой.</div>
+  <p>Наконец, есть одна тонкая, но решающая черта: дарующий сохраняет способность удивляться чуду. Больной к своим «чудесам» привыкает — для него они естественны, как дыхание, ведь он в них не сомневался с первого дня. Дарующий каждый раз поражён заново — и каждый раз спрашивает: «Это я? Или это через меня? И если через меня — то кто тогда я?». Этот вопрос, на который нет ответа, и есть единственная форма, в которой дар согласен в себе жить. Уберите вопрос — и останется либо бред, либо ремесло. Оставьте — и останется человек.</p>
+</section>
+
+<!-- ===== V. НАЗАРЕТ ===== -->
+<section id="nazareth">
+  <span class="num">V · Назарет</span>
+  <h2>Человек из <em>Назарета</em></h2>
+  <p>Если верны исторические данные, а не доверять множеству факторов нет конкретных причин, то и сам Иисус из Назарета тяготился, сомневался своей избранностью, сторонился её и боялся — как боялся и гордости за чудеса, им свершаемые, и просил отца своего, совсем о себе, о другой участи. Это не богохульство, а, напротив, самое честное, что можно о нём сказать в рамках нашего вопроса: он — образец того, как выглядит дар, прошедший через горнило сомнения и не сгоревший в нём.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="when">Начало · Крещение</div>
+      <div class="what">«Ты сын мой возлюбленный» — и тут же в пустыню.</div>
+      <div class="gloss">Призвание дано — и первым делом оно уводит не на площадь, а в одиночество. Дар не начинается с триумфа; он начинается с искушения превратиться в болезнь: «скажи камням, чтобы стали хлебами», то есть — воспользуйся, докажи, насладись.</div>
+    </div>
+    <div class="tl-item">
+      <div class="when">Сорок дней в пустыне</div>
+      <div class="what">Искушение властью, чудом и славой — и отказ от всех трёх.</div>
+      <div class="gloss">Именно эти три — власть, чудо ради чуда, слава — и есть симптомы, по которым болезнь узнаёт себя. Отказаться от них — значит остаться по эту сторону грани. Принять — означало бы стать тем, кто не сомневается.</div>
+    </div>
+    <div class="tl-item">
+      <div class="when">Проповедь и чудеса</div>
+      <div class="what">«Не сказывайте никому» — сторонится славы после исцелений.</div>
+      <div class="gloss">Больной позвал бы толпу. Он, напротив, просит исцелённого молчать — потому что знает: слава за чудо есть та самая гордость, которой боялся. Дар избегает свидетелей своего блеска.</div>
+    </div>
+    <div class="tl-item">
+      <div class="when">Гефсиманский сад</div>
+      <div class="what">«Отче мой, если возможно, да минует меня чаша сия».</div>
+      <div class="gloss">Вот она, фраза, которой не произнёс бы ни один больной бредом избранности. Больной не просит снять с него миссию — миссия ему сладка. Дарующий просит — потому что миссия ему в тягость. Это слово — печать грани.</div>
+    </div>
+    <div class="tl-item">
+      <div class="when">Голгофа</div>
+      <div class="what">«Боже мой, для чего ты оставил меня?»</div>
+      <div class="gloss">Последнее сомнение — самое глубокое, и оно же самое человеческое. Кто спросил бы так, будучи безусловно уверен в своей избранности? Это крик не бреда, а дара, доведённого до предела; крик того, кто до конца остался способен усомниться.</div>
+    </div>
+  </div>
+
+  <p>Я привожу этот пример не как веру, а как свидетельство — то есть как данные. Если тексты, дошедшие до нас, описывают не вымышленную фигуру, а живого человека, то этот человек ведёт себя ровно так, как предсказывает наша грань: он несёт дар, он не отрицает его, но он же тяготится им, просит о другой участи, сторонится восторгов, боится гордости и в последний час допускает, что оставлен. Это и есть портрет дарующего, написанный не нашим языком, а языком эпохи, — и оттого особенно ценный: он не подгонял себя под нашу формулу, формула случайно сошлась с ним.</p>
+  <p>Можно, конечно, возразить, что мы читаем в этих текстах то, что хотим видеть. Возможно. Но обратите внимание: мы читаем не «он не сомневался», а «он просил о другой участи». Тексты донесли до нас не торжество, а тяготу — а ведь тягота неудобна никакому культу, никакому бреду, никакой хвастливой легенде. Тяготу трудно выдумать. Она сохранилась, скорее всего, потому, что её невозможно было убрать, не разрушив весь образ. И в этом — её доказательная сила.</p>
+</section>
+
+<!-- ===== VI. СРАВНЕНИЕ ===== -->
+<section id="comparison">
+  <span class="num">VI · Сравнение</span>
+  <h2>Двое <em>у одной двери</em></h2>
+  <p>Сведём теперь оба портрета в одну таблицу. Нажмите на любую строку, чтобы развернуть пояснение, — но и в свёрнутом виде она читается как приговор: слева и справа стоят не разные содержания, а разные отношения к одному и тому же содержанию.</p>
+
+  <div class="compare reveal">
+    <div class="row head">
+      <div class="cell dim">Измерение</div>
+      <div class="cell">Болезнь</div>
+      <div class="cell">Дар</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Уверенность в избранности</div>
+      <div class="cell sick">Полная, без тени</div>
+      <div class="cell gift">Сомнительная, тревожная</div>
+      <div class="detail">Больной знает, что избран, как знает своё имя. Дарующий не знает, избран ли он, или просто чувствительнее других, или болен — и продолжает работать, несмотря на это незнание, а не благодаря ему.</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Отношение к собственной болезни</div>
+      <div class="cell sick">«Я здоров и более того»</div>
+      <div class="cell gift">«А что, если я болен?»</div>
+      <div class="detail">Анозогнозия против самопроверки. Больной отнимает у себя саму возможность вопроса; дарующий вопрос этот живёт, и иногда мучает его годами — но именно мучит, а не отступает.</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Допущение собственной ошибки</div>
+      <div class="cell sick">Невозможно</div>
+      <div class="cell gift">Постоянно</div>
+      <div class="detail">Бред защищён от пересмотра отсутствием органа сомнения. Дар держится на пересмотре: каждое суждение проверяется — не потому что дарующий не доверяет видению, а потому что доверяет его силе слишком сильно, чтобы оставить без проверки.</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Этическая проверка «имею ли я право»</div>
+      <div class="cell sick">Отсутствует</div>
+      <div class="cell gift">Центральна</div>
+      <div class="detail">Больной уверен в праве по определению: раз он избран, любое его слово есть благо. Дарующий понимает, что рука, лежащая на чужой судьбе, может и сломать, — и потому каждое вмешательство он взвешивает так, будто решает за другого, потому что часто и решает.</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Страх перед своим даром</div>
+      <div class="cell sick">Нет — есть гордость</div>
+      <div class="cell gift">Есть, и сильный</div>
+      <div class="detail">Гордость за чудеса — то, чего, по преданию, боялся сам человек из Назарета. Больной гордости не боится: она для него естественна, как тепло огня для того, кто в нём горит и не чувствует жара.</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Реакция на славу и зрителя</div>
+      <div class="cell sick">Ищет, требует</div>
+      <div class="cell gift">Сторонится, прячется</div>
+      <div class="detail">Миссия больного требует толпы — без свидетелей бред величия пуст. Дар без толпы работает точнее: свидетель только мешает, потому что учит дарующего играть, а игра и есть первый шаг к потере дара и к переходу на ту сторону грани.</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Отношение к «сойти с ума»</div>
+      <div class="cell sick">Этого страха нет</div>
+      <div class="cell gift">Этим страхом отмечен</div>
+      <div class="detail">Страх сойти с ума — не признак болезни, а признак здравия; его нет как раз там, где он был бы всего уместнее. Дарующий боится безумия, потому что понимает, как тонка граница; больной её уже перешёл, и бояться ему нечего.</div>
+    </div>
+    <div class="row">
+      <div class="cell dim">Готовность к другой участи</div>
+      <div class="cell sick">Немыслима</div>
+      <div class="cell gift">«Да минует меня чаша сия»</div>
+      <div class="detail">Готовность отказаться от миссии — последняя печать. Кто не может отказаться, тот в миссии trapped; кто может — тот в ней свободен, и только свободный действительно её несёт.</div>
+    </div>
+    <div class="hint">Нажмите на строку, чтобы развернуть</div>
+  </div>
+</section>
+
+<!-- ===== VII. СПЕКТР ===== -->
+<section id="spectrum">
+  <span class="num">VII · Спектр</span>
+  <h2>Не <em>две комнаты</em>, а один коридор</h2>
+  <p>Теперь — важное уточнение, без которого всё сказанное превратится в ложную простоту. Болезнь и дар — не две запертые комнаты с дверью между ними. Это один коридор, по которому человек может пройти в обе стороны, и есть на нём мёртвые зоны с обоих концов. Полное отсутствие сомнения — патология; но и полное, парализующее сомнение — тоже патология, только другого рода: человек, который сомневается так, что не смеет произнести ни слова и не смеет поднять глаз, — уже не дарующий, он раздавлен. Дар живёт в средней полосе: сомнение живое, но не смертельное, тревожное, но работающее.</p>
+
+  <div class="spectrum-wrap reveal">
+    <div class="spectrum-bar">
+      <div class="seg s1" style="flex:1.5">нет сомнения</div>
+      <div class="seg s2" style="flex:1.5">слабое</div>
+      <div class="seg s3" style="flex:3">живое</div>
+      <div class="seg s4" style="flex:2">избыточное</div>
+      <div class="seg s5" style="flex:2">разрушающее</div>
+      <div class="spectrum-marker" id="sMarker" style="left:55%"></div>
+    </div>
+    <input type="range" id="doubtSlider" min="0" max="100" value="55" step="1" aria-label="Уровень сомнения">
+    <div class="spectrum-readout" id="sReadout"></div>
+  </div>
+
+  <p>Подвиньте ползунок. Зона, отмеченная золотом, — та самая средняя полоса, где сомнение не убивает дар, а держит его в форме. Слева от неё сомнения слишком мало — и мы вступаем в страну бреда, где «я избран» звучит всё громче и всё недостовернее. Справа сомнения слишком много — и мы вступаем в страну, где «может быть, я просто болен» становится не проверкой, а приговором, после которого человек замолкает совсем. Грань, таким образом, — не линия, а полоса; и задача не в том, чтобы перешагнуть её, а в том, чтобы остаться в ней.</p>
+  <p>Отсюда — горькая практическая мораль. Если вы любите человека, который «слышит» или «видит», не торопитесь ни подтвердить, ни опровергнуть его. Спросите другое: <em>может ли он сомневаться?</em> Если может — у вас в руках, скорее всего, дар, тяжёлый, беспокойный, требующий ухода, но дар. Если не может ни на секунду — перед вами, вероятнее, болезнь, и вести его надо не к толпе, а к врачу. Один и тот же вопрос — «а что, если я не прав?» — разделяет эти двое вернее любого теста.</p>
+</section>
+
+<!-- ===== VIII. ЭТИКА ===== -->
+<section id="ethics">
+  <span class="num">VIII · Этика</span>
+  <h2>Кто дал <em>право</em></h2>
+  <p>Есть ещё одна ось, которую трудно измерить и невозможно обойти, — моральная. Больной уверен в своём праве влиять на судьбы людей именно потому, что не имеет органа, который спросил бы «а имею ли я право?». Для него вопроса не существует: раз он избран, любое его вмешательство священно по определению, а любой, кто противится, — просто не дорос. Эта автоматическая правота — не недостаток характера, а симптом; но она разрушительна именно в силу своей автоматичности. Человек, не способный усомниться в праве, причиняет больше вреда, чем человек, способный и сознательно выбравший вред, — потому что второй хотя бы знает, что делает.</p>
+  <p>Дарующий, напротив, имеет право — и именно поэтому постоянно ставит его под вопрос. Он спрашивает: этично ли мне говорить этому человеку то, что я вижу в его будущем? Имею ли я право отговорить его от брака, который мне кажется гибельным? Или моё видение — лишь моя проекция, и я просто возвожу свой страх в ранг пророчества? Эти вопросы не красивая поза; они — рабочая проверка, без которой дар становится тиранией. Ибо дар без этического сомнения — это уже не дар, а власть, а власть без внутреннего суда быстрее всего становится тем, что мы называем одержимостью.</p>
+  <p>Здесь и проходит последний, самый тонкий слой грани. Не «что человек видит», а «кого он спрашивает, прежде чем сказать о виденном». Если он спрашивает только себя и тут же себе отвечает «да, имею право» — мы у опасной черты. Если он спрашивает и не находит быстрого ответа, мучается, иногда молчит вместо того чтобы говорить, — мы, вероятнее, у подлинного дара. Этика — это не украшение дара, а его структурная часть: убрать её, и механизм сломается ровно в ту сторону, в какую ломается болезнь.</p>
+  <blockquote>
+    Болезнь не спрашивает «имею ли я право» — она знает, что имеет. Дар спрашивает — и порой именно потому молчит. Самое этичное слово дарующего — то, которое он удержал.
+  </blockquote>
+</section>
+
+<!-- ===== IX. КОДА ===== -->
+<section id="coda">
+  <span class="num">IX · Послесловие</span>
+  <h2>Тонкая <em>нить</em></h2>
+  <p>Подведём. Грань между болезнью и даром проходит не по содержанию переживания и не по его силе, а по внутреннему отношению к нему — по способности человека сомневаться. Болезнь — это уверенность без тени, анозогнозия, недопущение ошибки, гордость за чудеса, поиск свидетелей и невозможность попросить о другой участи. Дар — это свет, который боится себя: живое сомнение в собственном здравии, постоянная этическая проверка права, страх перед собственной силой, сторонение славы и готовность, как человеку из Назарета, попросить отца о другой чаше.</p>
+  <p>Грань эта — не стена, а нить. Её можно перешагнуть, и перешагивают чаще, чем кажется; её можно и натянуть — сомнением, и порвать — отсутствием его. Она не видна снаружи, в момент, когда человек говорит; она видна только в тишине, когда он спрашивает себя. И потому самый надёжный вопрос, какой можно задать — не человеку, а самому себе о человеке, — звучит так: <em>может ли он усомниться?</em> Если да — берегите его; в нём, вероятно, дар. Если нет — не спорьте с ним; спорить с тем, у кого нет органа сомнения, всё равно что доказывать слепому, что в комнате темно. Его надо не убеждать, а лечить.</p>
+  <p>И последнее. Эта нить держит не только дар и болезнь, но и всех нас. Каждый, кто хоть раз был уверен в своей правоте до невидимости чужого лица, — на секунду оказывался по ту сторону грани. Каждый, кто хоть раз спрашивал себя «а что, если я не прав?» и от этого замолкал, — на секунду бывал по эту. Грань, о которой мы говорим, — не удел пророков и больных; это механизм, по которому человечность вообще отличает себя от одержимости. Беречь сомнение — значит беречь ту единственную нить, на которой держится разница между тем, кто ведёт, и тем, кого несёт.</p>
+</section>
+
+<footer class="coda">
+  <div class="mark">— грань проходит по сомнению —</div>
+  <div class="meta">Эссе-повесть · клиника · история · интерактив</div>
+</footer>
+
+</main>
+
+<script>
+(function(){
+  // progress rail
+  var rail=document.getElementById('rail');
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    rail.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+  }
+  document.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  // reveal
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  // ===== CLINICAL CHART =====
+  var dims=[
+    {name:'Уверенность в избранности',     sick:9.4, gift:3.2},
+    {name:'Признание «я могу ошибаться»',   sick:1.1, gift:8.6},
+    {name:'Сомнение в своём здоровье',      sick:0.8, gift:7.9},
+    {name:'Страх перед своим даром',        sick:1.4, gift:8.2},
+    {name:'Этическая проверка права',       sick:1.6, gift:8.8}
+  ];
+  var W=560,H=320,m={l:18,r:18,t:30,b:54},pw=W-m.l-m.r,ph=H-m.t-m.b;
+  var rowH=ph/dims.length, barH=rowH*0.30, gap=rowH*0.10;
+
+  function buildChart(set){
+    var svg=document.getElementById('chartSvg');
+    var out=[];
+    out.push('<text x="'+(W/2)+'" y="20" text-anchor="middle" fill="#c9a55a" font-family="PT Sans,sans-serif" font-size="11" letter-spacing="2" style="text-transform:uppercase">Пять измерений · болезнь против дара</text>');
+    // grid
+    for(var g=0;g<=5;g++){
+      var gx=m.l+pw*(g/5);
+      out.push('<line x1="'+gx+'" y1="'+m.t+'" x2="'+gx+'" y2="'+(m.t+ph)+'" stroke="rgba(201,165,90,.10)" stroke-width="1"/>');
+    }
+    dims.forEach(function(d,i){
+      var cy=m.t+rowH*i+rowH/2;
+      // label
+      out.push('<text x="'+(m.l+4)+'" y="'+(cy-barH-gap-4)+'" fill="#e9e3d5" font-family="Cormorant Garamond,serif" font-style="italic" font-size="14">'+d.name+'</text>');
+      // sick bar
+      if(set!=='gift'){
+        var sw=(d.sick/10)*pw;
+        out.push('<rect x="'+m.l+'" y="'+(cy-barH-gap)+'" width="'+sw+'" height="'+barH+'" rx="3" fill="#d98a8a" opacity="0.92"><animate attributeName="width" from="0" to="'+sw+'" dur="0.7s" fill="freeze"/></rect>');
+        out.push('<text x="'+(m.l+sw+6)+'" y="'+(cy-barH-gap+barH*0.72)+'" fill="#d98a8a" font-family="PT Sans,sans-serif" font-size="11">'+d.sick.toFixed(1)+'</text>');
+      }
+      // gift bar
+      if(set!=='sick'){
+        var gw=(d.gift/10)*pw;
+        out.push('<rect x="'+m.l+'" y="'+(cy+gap)+'" width="'+gw+'" height="'+barH+'" rx="3" fill="#8ad9c8" opacity="0.92"><animate attributeName="width" from="0" to="'+gw+'" dur="0.7s" fill="freeze"/></rect>');
+        out.push('<text x="'+(m.l+gw+6)+'" y="'+(cy+gap+barH*0.72)+'" fill="#8ad9c8" font-family="PT Sans,sans-serif" font-size="11">'+d.gift.toFixed(1)+'</text>');
+      }
+    });
+    // legend inline bottom
+    var ly=H-24;
+    out.push('<rect x="'+(m.l)+'" y="'+ly+'" width="12" height="12" rx="2" fill="#d98a8a"/>');
+    out.push('<text x="'+(m.l+18)+'" y="'+(ly+10)+'" fill="#b9b1a0" font-family="PT Sans,sans-serif" font-size="11">Болезнь — уверенность без тени</text>');
+    out.push('<rect x="'+(m.l+230)+'" y="'+ly+'" width="12" height="12" rx="2" fill="#8ad9c8"/>');
+    out.push('<text x="'+(m.l+248)+'" y="'+(ly+10)+'" fill="#b9b1a0" font-family="PT Sans,sans-serif" font-size="11">Дар — свет, который боится себя</text>');
+    svg.innerHTML=out.join('');
+  }
+  buildChart('all');
+
+  document.querySelectorAll('.chart-toggle button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.chart-toggle button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      buildChart(b.dataset.set);
+    });
+  });
+
+  // ===== COMPARISON TABLE =====
+  document.querySelectorAll('.compare .row:not(.head)').forEach(function(r){
+    r.addEventListener('click',function(){
+      r.classList.toggle('open');
+    });
+  });
+
+  // ===== DOUBT SPECTRUM =====
+  var slider=document.getElementById('doubtSlider');
+  var marker=document.getElementById('sMarker');
+  var ro=document.getElementById('sReadout');
+  var zones=[
+    {min:0,max:15,zone:'Зона I', title:'Отсутствие сомнения', text:'«Я знаю. Точка». Уверенность без единой тени. Человек не спрашивает, здоров ли он, — он знает, что здоров и более чем здоров. Это мёртвая зона слева: по клинике — анозогнозия, бред величия и избранности. Здесь нет дара, здесь есть только его имитация, доведённая болезнью до твёрдости камня.', color:'#d98a8a'},
+    {min:15,max:30,zone:'Зона II', title:'Слабое сомнение', text:'Сомнение появляется, но легко утешается. Человек на секунду спрашивает «а вдруг я не прав?», но тут же находит себе оправдание — обычно в форме обиды на тех, кто не поверил. Опасная полоса: грань уже близко, но ещё можно перешагнуть влево, в болезнь, если сомнение не удержится.', color:'#c98a5a'},
+    {min:30,max:70,zone:'Зона III', title:'Живое сомнение', text:'Средняя, золотая полоса. Сомнение есть, оно тревожит, но не парализует. Человек работает, видит, говорит — и каждый раз спрашивает себя: здоров ли я? имею ли право? не выдаю ли я страх за пророчество? Именно здесь живёт дар: тяжёлый, беспокойный, но работающий. Задача — не уйти отсюда.', color:'#e8c879'},
+    {min:70,max:88,zone:'Зона IV', title:'Избыточное сомнение', text:'Сомнения слишком много. Человек не то чтобы не верит дару — он не решается доверить ему ни одного слова. Он молчит там, где мог бы помочь, и молчание это уже не этика, а защитный паралич. Грань здесь нарушена в другую сторону: дар задушен проверкой.', color:'#7ab0c9'},
+    {min:88,max:100,zone:'Зона V', title:'Разрушающее сомнение', text:'«Я просто болен, и всё, что я вижу, — симптом». Сомнение стало приговором, после которого человек замолкает совсем. Это не вершина здравия, а другая патология — obsessive self-doubt, поглощающий дар целиком. Мёртвая зона справа: как и слева, здесь уже нет дара.', color:'#6a6ac9'}
+  ];
+  function readout(v){
+    marker.style.left=v+'%';
+    var z=zones.find(function(x){return v>=x.min && v<=x.max;})||zones[zones.length-1];
+    ro.innerHTML='<div class="zone" style="color:'+z.color+'">'+z.zone+' · '+v+'% сомнения</div>'+
+      '<h4>'+z.title+'</h4>'+
+      '<p>'+z.text+'</p>';
+  }
+  slider.addEventListener('input',function(){readout(parseInt(slider.value,10));});
+  readout(55);
+})();
+</script>
+</body>
+</html>
